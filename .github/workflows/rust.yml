@@ -1,0 +1,46 @@
+name: Rust
+
+env:
+  CARGO_TERM_COLOR: always
+
+on:
+  push:
+    branches: [ "main", "master", "prod" ]
+    tags: [ "v*.*.*" ]
+  schedule:
+    - cron: "30 9 * * 5"
+  workflow_dispatch:
+    inputs:
+      publish:
+        default: true
+        description: 'Publish'
+        required: true
+        type: boolean
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - wasm32-unknown-unknown
+          - wasm32-wasi
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup default nightly && rustup target add ${{ matrix.target }} --toolchain nightly
+      - run: cargo build --release --target ${{ matrix.target }} -v --workspace
+      - run: cargo test --all --all-features --release --target ${{ matrix.target }} -v
+  publish:
+    if: ${{ github.event.inputs.publish }}
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - template-tailwindcss-yew
+    steps:
+      - uses: actions/checkout@v3
+      - name: Publish (${{matrix.package}})
+        run: cargo publish --all-features --package ${{ matrix.package }} --verbose --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
