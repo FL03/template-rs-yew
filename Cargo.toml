@@ -36,7 +36,7 @@ yew = "0.20"
 console_error_panic_hook = { optional = true, version = "0.1" }
 dotenv_codegen = "0.15"
 futures = "0.3"
-gloo = "0.8"
+gloo = "0.10"
 js-sys = "0.3"
 lazy_static = "1.4"
 log = "0.4"
