@@ -29,7 +29,7 @@ jobs:
       matrix:
         target: [ wasm32-unknown-unknown ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup
         run: |
           rustup default nightly
