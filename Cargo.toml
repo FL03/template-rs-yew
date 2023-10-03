@@ -57,7 +57,7 @@ wasm-logger = "0.2"
 
 # UI
 yew = "0.20"
-yew-hooks = "0.2"
+yew-hooks = "0.3"
 yew-router = "0.17"
 
 [dependencies.web-sys]
